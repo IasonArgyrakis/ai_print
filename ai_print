@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Check if at least one argument is provided
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 [-r] <filename|directory>"
+    exit 1
+fi
+
+# Initialize variables
+RECURSIVE=0
+TARGET=""
+
+# Parse options
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -r) RECURSIVE=1; shift ;;
+        *) TARGET="$1"; shift ;;
+    esac
+done
+
+# Ensure a target file or directory is provided
+if [ -z "$TARGET" ]; then
+    echo "Error: No file or directory specified."
+    exit 1
+fi
+
+# Generate output filename based on input
+BASENAME=$(basename "$TARGET")
+OUTPUT_FILE="${BASENAME}.4ai"
+
+# Function to process files
+process_file() {
+    local file="$1"
+    echo "-------- $file Contents------" >> "$OUTPUT_FILE"
+    cat "$file" >> "$OUTPUT_FILE"
+    echo -e "\n--------End $file Contents------\n" >> "$OUTPUT_FILE"
+}
+
+# If recursive flag is set
+if [ "$RECURSIVE" -eq 1 ]; then
+    if [ ! -d "$TARGET" ]; then
+        echo "Error: Directory '$TARGET' not found!"
+        exit 1
+    fi
+
+    # Clear existing output file
+    > "$OUTPUT_FILE"
+
+    # Process all files recursively
+    find "$TARGET" -type f | while read -r file; do
+        process_file "$file"
+    done
+else
+    # If it's a single file
+    if [ ! -f "$TARGET" ]; then
+        echo "Error: File '$TARGET' not found!"
+        exit 1
+    fi
+
+    # Clear existing output file
+    > "$OUTPUT_FILE"
+
+    process_file "$TARGET"
+fi
+
+# Notify that output is saved
+echo "Output saved to '$OUTPUT_FILE'."
