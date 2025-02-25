@@ -14,7 +14,7 @@ To install the script globally from GitHub Gist:
 
 1. Download the script:
    ```bash
-   sudo curl -o /usr/local/bin/ai_print  https://gist.githubusercontent.com/IasonArgyrakis/dd967162bf8eba71981cb40894faf585/raw/ai_print](https://raw.githubusercontent.com/IasonArgyrakis/ai_print/refs/heads/main/ai_print
+   sudo curl -o /usr/local/bin/ai_print  https://raw.githubusercontent.com/IasonArgyrakis/ai_print/refs/heads/main/ai_print
    ```
 
 2. Make it executable:
